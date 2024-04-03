@@ -1,5 +1,5 @@
-import db from "../config/config.js";
-import asyncHandler from "../middlewares/errorHandler.js";
+import db from "@/config/config.js";
+import asyncHandler from "@/middlewares/errorHandler.js";
 const Boxchat = db.collection("Boxchat");
 const BoxchatController = {
   getBoxchat: asyncHandler(async (req, res) => {

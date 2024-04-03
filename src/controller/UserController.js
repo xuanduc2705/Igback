@@ -1,6 +1,6 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import db from "../config/config.js";
+import db from "@/config/config.js";
 const User = db.collection("User");
 const UserController = {
   Register: async (req, res) => {

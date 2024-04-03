@@ -1,4 +1,4 @@
-import addMessageToBoxchat from "../controller/socketmessage.js";
+import addMessageToBoxchat from "@/controller/socketmessage.js";
 
 function socketHandler(socket, socketIo) {
   console.log("New client connected" + socket.id);
