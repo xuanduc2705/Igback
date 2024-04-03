@@ -1,6 +1,8 @@
-const BoxchatController = require("../controller/BoxchatController");
+import BoxchatController from "../controller/BoxchatController.js";
 
-const router = require("express").Router();
-router.get("/", BoxchatController.getBoxchat);
-router.post("/", BoxchatController.addBoxchat);
-module.exports = router;
+const boxchatrouter = require("express").Router();
+boxchatrouter.get("/", BoxchatController.getBoxchat);
+boxchatrouter.post("/", BoxchatController.addBoxchat);
+boxchatrouter.post("/mess", BoxchatController.getBoxchatMess);
+
+export default boxchatrouter;

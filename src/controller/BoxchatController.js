@@ -1,70 +1,62 @@
-const generateRandomNumber = require("../function");
-const Boxchat = require("../model/boxchat");
-const jwt = require("jsonwebtoken");
+import db from "../config/config.js";
+import asyncHandler from "../middlewares/errorHandler.js";
+const Boxchat = db.collection("Boxchat");
 const BoxchatController = {
-  getBoxchat: async (req, res) => {
-    try {
-      const boxchat = await Boxchat.find();
-      res.status(200).json(boxchat);
-    } catch (err) {
-      res.status(500).json(err);
-    }
-  },
-  addBoxchat: async (req, res) => {
-    try {
-      const { host, partner, isg, avatar1, avatar2, groupname } = req.body;
-
-      // Generate a random boxchatid
-      const boxchatid = generateRandomNumber;
-      let boxchat;
-      if (isg == true) {
-        const existingBoxchat = await Boxchat.findOne({
-          member: partner,
-          host: host,
-          groupname: groupname,
-        });
-        if (existingBoxchat) {
-          return res.status(400).json({ error: "Already has" });
-        }
-        boxchat = new Boxchat({
-          boxchatid,
-          isGroupchat: isg,
-          host,
-          member: partner,
-          groupava: "",
-          msgg: [],
-          groupname: groupname,
-        });
-      } else {
-        const existingBoxchat1 = await Boxchat.findOne({
-          member: partner,
-          host: host,
-        });
-        const existingBoxchat2 = await Boxchat.findOne({
-          member: host,
-          host: partner,
-        });
-        if (existingBoxchat1 || existingBoxchat2) {
-          return res.status(400).json({ error: "Already has" });
-        }
-        boxchat = new Boxchat({
-          boxchatid,
-          isGroupchat: isg,
-          host,
-          member: partner,
-          avatar1: avatar1,
-          avatar2: avatar2,
-          msgg: [],
-        });
+  getBoxchat: asyncHandler(async (req, res) => {
+    const boxlist = await Boxchat.get();
+    const list = boxlist.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+    res.send(list);
+  }),
+  getBoxchatMess: asyncHandler(async (req, res) => {
+    const { boxchatid } = req.body;
+    const boxlist = await Boxchat.doc(boxchatid).collection("message").get();
+    const list = boxlist.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+    res.send(list);
+  }),
+  addBoxchat: asyncHandler(async (req, res) => {
+    const { host, partner, isg, avatar1, avatar2, groupname } = req.body;
+    let boxchat;
+    const boxlist = await Boxchat.get();
+    const box_found = boxlist.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    }));
+    if (isg == true) {
+      const existingBoxchat = box_found.find(
+        (u) => u.member == partner && u.host == host && u.groupname == groupname
+      );
+      if (existingBoxchat) {
+        res.send({ msg: "boxchat already exist" });
       }
-      // Save the new Boxchat object to the database
-      await boxchat.save();
-
-      res.status(200).json(boxchat);
-    } catch (err) {
-      res.status(500).json({ error: "Failed to add boxchat" });
+      boxchat = {
+        isGroupchat: isg,
+        host,
+        member: partner,
+        groupava: "",
+        msgg: [],
+        groupname: groupname,
+      };
+    } else {
+      const existingBoxchat1 = box_found.find(
+        (u) => u.member == partner && host == host
+      );
+      const existingBoxchat2 = box_found.find(
+        (u) => u.member == host && host == partner
+      );
+      if (existingBoxchat1 || existingBoxchat2) {
+        res.send({ error: "Already has" });
+      }
+      boxchat = {
+        isGroupchat: isg,
+        host,
+        member: partner,
+        avatar1: avatar1,
+        avatar2: avatar2,
+        msgg: [],
+      };
     }
-  },
+    await Boxchat.add(boxchat);
+    res.send({ msg: "Boxchat add" });
+  }),
 };
-
-module.exports = BoxchatController;
+export default BoxchatController;
