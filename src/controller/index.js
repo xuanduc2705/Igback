@@ -1,5 +1,12 @@
 import addMessageToBoxchat from "@/controller/socketmessage";
-import { BoxchatController } from "./BoxchatController";
-import { UserController } from "./UserController";
+import { getBoxchat, addBoxchat } from "./BoxchatController";
+import { getUser, Register, login } from "./UserController";
 
-export { BoxchatController, UserController, addMessageToBoxchat };
+export {
+  getBoxchat,
+  addBoxchat,
+  addMessageToBoxchat,
+  getUser,
+  Register,
+  login,
+};

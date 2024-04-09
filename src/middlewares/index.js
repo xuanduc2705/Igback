@@ -1,12 +1,21 @@
+import express from "express";
 class Controller {
-  constructor(callback) {
-    this.callback = callback;
+  constructor() {
+    this.router = express.Router();
   }
 
-  asyncHandler() {
+  get(path, handler) {
+    this.router.get(path, this.asyncHandler(handler));
+  }
+
+  post(path, handler) {
+    this.router.post(path, this.asyncHandler(handler));
+  }
+
+  asyncHandler(callback) {
     return async (req, res, next) => {
       try {
-        await this.callback(req, res, next);
+        await callback(req, res, next);
       } catch (error) {
         res
           .status(res.statusCode < 400 ? 400 : res.statusCode || 500)
@@ -15,5 +24,4 @@ class Controller {
     };
   }
 }
-
 export default Controller;

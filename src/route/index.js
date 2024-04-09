@@ -4,7 +4,7 @@ import userApi from "@/route/user";
 import boxchat from "@/route/boxchat";
 
 const routeapi = express.Router();
-
+routeapi.use(express.json());
 routeapi.use("/user", userApi);
 routeapi.use("/boxchat", boxchat);
 routeapi.use("/", webApi);

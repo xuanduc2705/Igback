@@ -1,8 +1,9 @@
-import { BoxchatController } from "@/controller";
-import express from "express";
-const boxchat = express.Router();
+import { getBoxchat } from "@/controller";
+import Controller from "@/middlewares";
+class RouteExtend extends Controller {}
+const boxchat = new RouteExtend();
 
-boxchat.get("/api/boxchat", BoxchatController.getBoxchat);
+boxchat.get("/api/boxchat", getBoxchat);
 // boxchat.post("/api/boxchat/mess", BoxchatController.getBoxchatMess);
 
-export default boxchat;
+export default boxchat.router;
