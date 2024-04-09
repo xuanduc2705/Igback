@@ -1,9 +1,8 @@
-import { login, addBoxchat, Register } from "@/controller";
-import Controller from "@/middlewares";
-class RouteExtend extends Controller {}
-const webApi = new RouteExtend();
-webApi.post("/register", Register);
-webApi.post("/api/addboxchat", addBoxchat);
-webApi.post("/user/login", login);
+import express from "express";
+import UserWeb from "./UserWeb";
+import BoxchatWeb from "./BoxchatWeb";
+const app = express();
+app.use("/user", UserWeb);
+app.use("/boxchat", BoxchatWeb);
 
-export default webApi.router;
+export default app;
