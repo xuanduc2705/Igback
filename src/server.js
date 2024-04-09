@@ -4,8 +4,8 @@ import morgan from "morgan";
 import dotenv from "dotenv";
 import http from "http";
 import { Server } from "socket.io";
-import routeapi from "./route";
-import socketHandler from "./config/socket";
+import { socketHandler } from "@/config";
+import routeapi from "@/route";
 
 const app = express();
 const server = http.createServer(app);

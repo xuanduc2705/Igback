@@ -1,10 +1,9 @@
-import UserController from "@/controller/UserController.js";
-import BoxchatController from "@/controller/BoxchatController";
+import { Register, addBoxchat, login } from "@/controller";
 import express from "express";
 const webApi = express.Router();
 
-webApi.post("/register", UserController.Register);
-webApi.post("/api/addboxchat", BoxchatController.addBoxchat);
-webApi.post("/login", UserController.login);
+webApi.post("/register", Register);
+webApi.post("/api/addboxchat", addBoxchat);
+webApi.post("/login", login);
 
 export default webApi;

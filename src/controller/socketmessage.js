@@ -1,4 +1,5 @@
-import db from "@/config/config.js";
+import { db } from "@/config";
+
 const Boxchat = db.collection("Boxchat");
 
 async function addMessageToBoxchat(data) {
